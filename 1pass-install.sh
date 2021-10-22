@@ -8,6 +8,7 @@ unzipdir="$tmpdir"
 installdir="/usr/local/bin"
 installfile="op"
 installpath="$unzipdir/$installfile"
+installedpath="$installdir/$installfile"
 
 function errorCheck {
   sleep 3
@@ -30,8 +31,11 @@ function install1pass {
     sudo cp "$installpath" "$installdir/" &
     wait "$!"
     errorCheck "$?" "cp"
-    if [ -e "$installpath" ]; then
+    if [ -e "$installedpath" ]; then
+      echo ""
       echo "Successfully installed 1password CLI Tool."
+      echo "Run the command 'op signin [<sign_in_address> <email_address> <secret_key>' to sign into your 1password account"
+      echo ""
     else
       echo "ERROR: Binary file not found, assuming installation failed and previous error as not caught"
     fi
@@ -54,12 +58,12 @@ function cleanup {
   fi
 }
 function uninstall1pass {
-  if [ -e "$installpath" ]; then
+  if [ -e "$installedpath" ]; then
     echo -n "Uninstalling 1password CLI tool..."
-    sudo rm "$installpath"
-    if [ -e "$installpath" ]; then
+    sudo rm "$installedpath"
+    if [ -e "$installedpath" ]; then
       echo "FAILED"
-      echo "ERROR: Failed to remove binary file \"$installpath\""
+      echo "ERROR: Failed to remove binary file \"$installedpath\""
     else
       echo "DONE"
     fi
@@ -68,6 +72,20 @@ function uninstall1pass {
   fi
 }
 function initChecks {
+  if [ -e "$installedpath" ]; then
+    echo "1password CLI tool appears to already be installed"
+    read -rp "Do you want to reinstall? [y/n]: " select
+    if [ "$select" == "y" ]; then
+      uninstall1pass
+      cleanup
+      initChecks
+      exit 0
+    else
+      exit 0
+    fi
+  else
+    echo "Confirmed 1password CLI Tool is not already installed"
+  fi
   if [ -d "$tmpdir" ]; then
     echo "Temp dir found"
     install1pass
