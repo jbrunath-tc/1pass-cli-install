@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash +e
 
 url="https://cache.agilebits.com/dist/1P/op/pkg/v1.12.2/op_linux_amd64_v1.12.2.zip"
 tmpdir="/tmp/1pass"
@@ -44,7 +44,7 @@ function cleanup {
   if [ -d "$tmpdir" ]; then
     rm -r "$tmpdir"
   else
-    "Temp files not found, assuming already clean"
+    echo "Temp files not found, assuming already clean"
   fi
 }
 function uninstall1pass {
@@ -56,12 +56,16 @@ function uninstall1pass {
 }
 function initChecks {
   if [ -d "$tmpdir" ]; then
+    echo "Temp dir found"
     install1pass
   else
+    echo -n "Creating temp dir..."
     mkdir "$tmpdir"
     if [ -d "$tmpdir" ]; then
+      echo "DONE"
       install1pass
     else
+      echo "FAILED"
       echo "Error: failed to create tmpdir \"$tmpdir\""
       exit 1
     fi
