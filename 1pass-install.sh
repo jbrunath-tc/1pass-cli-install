@@ -20,6 +20,7 @@ function errorCheck {
   fi
 }
 function install1pass {
+  initChecks
   curl "$url" --output "$tmppath" &
   wait "$!"
   errorCheck "$?" "curl"
@@ -62,6 +63,7 @@ function initChecks {
       install1pass
     else
       echo "Error: failed to create tmpdir \"$tmpdir\""
+      exit 1
     fi
   fi
 }
