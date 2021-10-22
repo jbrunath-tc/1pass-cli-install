@@ -1,8 +1,9 @@
 # 1pass-CLI
 
-A simple Script to install the 1password Password Manager CLI on *nix systems
-NOTE: Currently pulls version 1.12.2, latest version as of October 22 2021. 
-      Simply update the URL variable with the updated download URL as needed
+A simple Script to install the 1password Password Manager CLI tool on *nix systems
+
+NOTE: Currently pulls version 1.12.2 from 1passwords website, latest version as of October 22 2021. 
+      Simply update the URL variable with the updated download URL as needed from here: https://app-updates.agilebits.com/product_history/CLI
 
 =============================================================================
 
