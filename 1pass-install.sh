@@ -41,14 +41,21 @@ function install1pass {
 }
 function cleanup {
   if [ -d "$tmpdir" ]; then
+    echo -n "Cleaning up temp files..."
     rm -r "$tmpdir"
+    if [ -e "$tmpdir" ]; then
+      echo "FAILED"
+      echo "ERROR: Failed to remove temp dir \"$tmpdir\""
+    else
+      echo "DONE"
+    fi
   else
     echo "Temp files not found, assuming already clean"
   fi
 }
 function uninstall1pass {
   if [ -e "$installpath" ]; then
-    echo "Uninstalling 1password CLI tool..."
+    echo -n "Uninstalling 1password CLI tool..."
     sudo rm "$installpath"
     if [ -e "$installpath" ]; then
       echo "FAILED"
@@ -91,7 +98,6 @@ case $1 in
   '--install')
     cleanup
     initChecks
-    install1pass
     ;;
   '--clean')
     cleanup
