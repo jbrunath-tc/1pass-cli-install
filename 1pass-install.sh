@@ -20,7 +20,6 @@ function errorCheck {
   fi
 }
 function install1pass {
-  initChecks
   curl "$url" --output "$tmppath" &
   wait "$!"
   errorCheck "$?" "curl"
@@ -34,7 +33,7 @@ function install1pass {
     if [ -e "$installpath" ]; then
       echo "Successfully installed 1password CLI Tool."
     else
-      "ERROR: Binary file not found, assuming installation failed and previous error as not caught"
+      echo "ERROR: Binary file not found, assuming installation failed and previous error as not caught"
     fi
   else
     echo ""
@@ -49,9 +48,16 @@ function cleanup {
 }
 function uninstall1pass {
   if [ -e "$installpath" ]; then
+    echo "Uninstalling 1password CLI tool..."
     sudo rm "$installpath"
+    if [ -e "$installpath" ]; then
+      echo "FAILED"
+      echo "ERROR: Failed to remove binary file \"$installpath\""
+    else
+      echo "DONE"
+    fi
   else
-    "Binary file not found, assuming already uninstalled"
+    echo "Binary file not found, assuming already uninstalled"
   fi
 }
 function initChecks {
@@ -84,6 +90,7 @@ function help {
 case $1 in
   '--install')
     cleanup
+    initChecks
     install1pass
     ;;
   '--clean')
